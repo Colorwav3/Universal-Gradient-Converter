@@ -249,6 +249,12 @@ function exportInFormat(data) {
         case 'gradients':
             writeUnityGradient(data);
             break;
+        case 'c4d':
+            writeCinema4dScript(data);
+            break;
+        case 'ms':
+            writeMaxScript(data);
+            break;
         default:
             writeAffinityPalette(data);
     }
@@ -257,7 +263,7 @@ function exportInFormat(data) {
 function selectExportFormat(format) {
     currentExportFormat = format;
 
-    // Update active button
+    // Update active button across BOTH views
     var btns = document.querySelectorAll('.format-btn');
     for (var i = 0; i < btns.length; i++) {
         if (btns[i].dataset.format === format) {
@@ -270,6 +276,37 @@ function selectExportFormat(format) {
     // Update export button labels
     updateExportControls();
 }
+
+var currentExportView = 'software'; // 'software' or 'filetype'
+
+function setExportView(view) {
+    currentExportView = view;
+
+    var softwareView = document.getElementById('export_view_software');
+    var filetypeView = document.getElementById('export_view_filetype');
+    var btnSoftware  = document.getElementById('view_software');
+    var btnFiletype  = document.getElementById('view_filetype');
+
+    if (view === 'software') {
+        softwareView.style.display = '';
+        filetypeView.style.display = 'none';
+        btnSoftware.classList.add('active');
+        btnFiletype.classList.remove('active');
+    } else {
+        softwareView.style.display = 'none';
+        filetypeView.style.display = '';
+        btnSoftware.classList.remove('active');
+        btnFiletype.classList.add('active');
+    }
+
+    // Re-sync the active format button in the new view
+    selectExportFormat(currentExportFormat);
+}
+
+// Initialize view on load
+document.addEventListener('DOMContentLoaded', function() {
+    setExportView('software');
+});
 
 // Build file data for a single group in the selected export format
 // Returns { data: ArrayBuffer|string|Blob, ext: string }
@@ -314,6 +351,10 @@ function buildExportForGroup(partData) {
             return { data: buildBlenderPy(partData), ext: '.py' };
         case 'gradients':
             return { data: buildUnityGradients(partData), ext: '.gradients' };
+        case 'c4d':
+            return { data: buildCinema4dPy(partData), ext: '.py' };
+        case 'ms':
+            return { data: buildMaxScript(partData), ext: '.ms' };
         default:
             return { data: buildAffinityPaletteBuffer(partData), ext: '.afpalette' };
     }

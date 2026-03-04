@@ -422,20 +422,83 @@ body::after {
     margin: 4px 0 20px;
 }
 
+.export-format-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
 .export-format-label {
     font-size: 0.75rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.08em;
     color: var(--text-dim);
-    margin-bottom: 12px;
+}
+
+.export-view-toggle {
+    display: flex;
+    gap: 2px;
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: var(--radius-sm);
+    padding: 2px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.view-toggle-btn {
+    font-family: var(--sans);
+    font-size: 0.68rem;
+    font-weight: 600;
+    padding: 5px 12px;
+    border: none;
+    border-radius: calc(var(--radius-sm) - 2px);
+    background: transparent;
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: all var(--transition);
+    white-space: nowrap;
+}
+
+.view-toggle-btn:hover {
+    color: var(--text);
+}
+
+.view-toggle-btn.active {
+    background: rgba(168, 85, 247, 0.2);
+    color: #fff;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
 }
 
 .export-format-grid {
     display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.format-group {
+    text-align: center;
+}
+
+.format-group-label {
+    font-size: 0.62rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+    opacity: 0.55;
+    margin-bottom: 8px;
+}
+
+.format-group-btns {
+    display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 8px;
+}
+
+.format-group-btns-flat {
+    /* Flat view without group headers */
 }
 
 .format-btn {

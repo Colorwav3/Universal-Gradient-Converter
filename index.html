@@ -67,44 +67,127 @@
                 <div class="soft-divider"></div>
 
                 <div class="export-format-section">
-                    <div class="export-format-label">Export as</div>
-                    <div class="export-format-grid">
-                        <button class="format-btn active" data-format="afpalette" onclick="selectExportFormat('afpalette')">
-                            <span class="format-btn-ext">.afpalette</span>
-                            <span class="format-btn-app">Affinity</span>
-                        </button>
-                        <button class="format-btn" data-format="grd" onclick="selectExportFormat('grd')">
-                            <span class="format-btn-ext">.grd</span>
-                            <span class="format-btn-app">Photoshop</span>
-                        </button>
-                        <button class="format-btn" data-format="ggr" onclick="selectExportFormat('ggr')">
-                            <span class="format-btn-ext">.ggr</span>
-                            <span class="format-btn-app">GIMP</span>
-                        </button>
-                        <button class="format-btn" data-format="kgr" onclick="selectExportFormat('kgr')">
-                            <span class="format-btn-ext">.kgr</span>
-                            <span class="format-btn-app">Krita</span>
-                        </button>
-                        <button class="format-btn" data-format="svg" onclick="selectExportFormat('svg')">
-                            <span class="format-btn-ext">.svg</span>
-                            <span class="format-btn-app">SVG</span>
-                        </button>
-                        <button class="format-btn" data-format="css" onclick="selectExportFormat('css')">
-                            <span class="format-btn-ext">.css</span>
-                            <span class="format-btn-app">CSS</span>
-                        </button>
-                        <button class="format-btn" data-format="tres" onclick="selectExportFormat('tres')">
-                            <span class="format-btn-ext">.tres</span>
-                            <span class="format-btn-app">Godot</span>
-                        </button>
-                        <button class="format-btn" data-format="py" onclick="selectExportFormat('py')">
-                            <span class="format-btn-ext">.py</span>
-                            <span class="format-btn-app">Blender</span>
-                        </button>
-                        <button class="format-btn" data-format="gradients" onclick="selectExportFormat('gradients')">
-                            <span class="format-btn-ext">.gradients</span>
-                            <span class="format-btn-app">Unity</span>
-                        </button>
+                    <div class="export-format-header">
+                        <div class="export-format-label">Export as</div>
+                        <div class="export-view-toggle">
+                            <button class="view-toggle-btn active" id="view_software" onclick="setExportView('software')">By Software</button>
+                            <button class="view-toggle-btn" id="view_filetype" onclick="setExportView('filetype')">By File Type</button>
+                        </div>
+                    </div>
+
+                    <!-- By Software view (default) -->
+                    <div id="export_view_software" class="export-format-grid">
+                        <div class="format-group">
+                            <div class="format-group-label">Design</div>
+                            <div class="format-group-btns">
+                                <button class="format-btn active" data-format="afpalette" onclick="selectExportFormat('afpalette')">
+                                    <span class="format-btn-app">Affinity</span>
+                                    <span class="format-btn-ext">.afpalette</span>
+                                </button>
+                                <button class="format-btn" data-format="grd" onclick="selectExportFormat('grd')">
+                                    <span class="format-btn-app">Photoshop</span>
+                                    <span class="format-btn-ext">.grd</span>
+                                </button>
+                                <button class="format-btn" data-format="ggr" onclick="selectExportFormat('ggr')">
+                                    <span class="format-btn-app">GIMP</span>
+                                    <span class="format-btn-ext">.ggr</span>
+                                </button>
+                                <button class="format-btn" data-format="kgr" onclick="selectExportFormat('kgr')">
+                                    <span class="format-btn-app">Krita</span>
+                                    <span class="format-btn-ext">.kgr</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="format-group">
+                            <div class="format-group-label">3D / Game Engines</div>
+                            <div class="format-group-btns">
+                                <button class="format-btn" data-format="py" onclick="selectExportFormat('py')">
+                                    <span class="format-btn-app">Blender</span>
+                                    <span class="format-btn-ext">.py</span>
+                                </button>
+                                <button class="format-btn" data-format="c4d" onclick="selectExportFormat('c4d')">
+                                    <span class="format-btn-app">Cinema 4D</span>
+                                    <span class="format-btn-ext">.py</span>
+                                </button>
+                                <button class="format-btn" data-format="ms" onclick="selectExportFormat('ms')">
+                                    <span class="format-btn-app">3ds Max</span>
+                                    <span class="format-btn-ext">.ms</span>
+                                </button>
+                                <button class="format-btn" data-format="tres" onclick="selectExportFormat('tres')">
+                                    <span class="format-btn-app">Godot</span>
+                                    <span class="format-btn-ext">.tres</span>
+                                </button>
+                                <button class="format-btn" data-format="gradients" onclick="selectExportFormat('gradients')">
+                                    <span class="format-btn-app">Unity</span>
+                                    <span class="format-btn-ext">.gradients</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="format-group">
+                            <div class="format-group-label">Web</div>
+                            <div class="format-group-btns">
+                                <button class="format-btn" data-format="svg" onclick="selectExportFormat('svg')">
+                                    <span class="format-btn-app">SVG</span>
+                                    <span class="format-btn-ext">.svg</span>
+                                </button>
+                                <button class="format-btn" data-format="css" onclick="selectExportFormat('css')">
+                                    <span class="format-btn-app">CSS</span>
+                                    <span class="format-btn-ext">.css</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- By File Type view -->
+                    <div id="export_view_filetype" class="export-format-grid" style="display:none">
+                        <div class="format-group">
+                            <div class="format-group-btns format-group-btns-flat">
+                                <button class="format-btn active" data-format="afpalette" onclick="selectExportFormat('afpalette')">
+                                    <span class="format-btn-ext">.afpalette</span>
+                                    <span class="format-btn-app">Affinity</span>
+                                </button>
+                                <button class="format-btn" data-format="grd" onclick="selectExportFormat('grd')">
+                                    <span class="format-btn-ext">.grd</span>
+                                    <span class="format-btn-app">Photoshop / AE</span>
+                                </button>
+                                <button class="format-btn" data-format="ggr" onclick="selectExportFormat('ggr')">
+                                    <span class="format-btn-ext">.ggr</span>
+                                    <span class="format-btn-app">GIMP</span>
+                                </button>
+                                <button class="format-btn" data-format="kgr" onclick="selectExportFormat('kgr')">
+                                    <span class="format-btn-ext">.kgr</span>
+                                    <span class="format-btn-app">Krita</span>
+                                </button>
+                                <button class="format-btn" data-format="svg" onclick="selectExportFormat('svg')">
+                                    <span class="format-btn-ext">.svg</span>
+                                    <span class="format-btn-app">SVG</span>
+                                </button>
+                                <button class="format-btn" data-format="css" onclick="selectExportFormat('css')">
+                                    <span class="format-btn-ext">.css</span>
+                                    <span class="format-btn-app">CSS</span>
+                                </button>
+                                <button class="format-btn" data-format="tres" onclick="selectExportFormat('tres')">
+                                    <span class="format-btn-ext">.tres</span>
+                                    <span class="format-btn-app">Godot</span>
+                                </button>
+                                <button class="format-btn" data-format="gradients" onclick="selectExportFormat('gradients')">
+                                    <span class="format-btn-ext">.gradients</span>
+                                    <span class="format-btn-app">Unity</span>
+                                </button>
+                                <button class="format-btn" data-format="py" onclick="selectExportFormat('py')">
+                                    <span class="format-btn-ext">.py</span>
+                                    <span class="format-btn-app">Blender</span>
+                                </button>
+                                <button class="format-btn" data-format="c4d" onclick="selectExportFormat('c4d')">
+                                    <span class="format-btn-ext">.py</span>
+                                    <span class="format-btn-app">Cinema 4D</span>
+                                </button>
+                                <button class="format-btn" data-format="ms" onclick="selectExportFormat('ms')">
+                                    <span class="format-btn-ext">.ms</span>
+                                    <span class="format-btn-app">3ds Max</span>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -152,6 +235,8 @@
     <script src="palette-js/write_godot.js"></script>
     <script src="palette-js/write_blender.js"></script>
     <script src="palette-js/write_unity.js"></script>
+    <script src="palette-js/write_cinema4d.js"></script>
+    <script src="palette-js/write_3dsmax.js"></script>
     <script src="palette-js/gradient_utils.js"></script>
     <script src="palette-js/palette_preview.js"></script>
 </body>
