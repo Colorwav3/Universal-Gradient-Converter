@@ -127,19 +127,14 @@ function renderPreviewPage() {
             }
         }
 
-        ctx.translate(0.5, 0.5);
-
         for (var j = 0; j < canvasSize; j++) {
             var t = j / canvasSize;
-            ctx.beginPath();
-            ctx.moveTo(0, j);
-            ctx.lineTo(canvasSize, j);
 
             var colour = gradientUtils.getColourFromGradient(palettes[i].Colours, t);
             var colourString = 'rgba(' + (colour.Red * 255.0).toFixed() + ',' + (colour.Green * 255.0).toFixed() + ',' + (colour.Blue * 255.0).toFixed() + ',' + colour.Alpha.toFixed(3) + ')';
 
-            ctx.strokeStyle = colourString;
-            ctx.stroke();
+            ctx.fillStyle = colourString;
+            ctx.fillRect(0, j, canvasSize, 1);
         }
 
         // Sample average color for glow effect
