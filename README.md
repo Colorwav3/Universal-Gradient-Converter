@@ -1,6 +1,8 @@
 # Universal Gradient Converter
 
-A browser-based tool that converts gradient files between **11 formats** across design apps, 3D/game engines, and web technologies — entirely client-side.
+**[Open the tool in your browser](https://colorwav3.github.io/Universal-Gradient-Converter/)** — no install, no download, runs entirely client-side.
+
+A browser-based tool that converts gradient files between **11 formats** across design apps, 3D/game engines, and web technologies.
 
 > Built on [Balakov/GrdToAfpalette](https://github.com/Balakov/GrdToAfpalette) by [Mike Stimpson](https://mikestimpson.com). Extended by [Colorwav3](https://github.com/Colorwav3) with AI assistance (GitHub Copilot / Claude).
 
