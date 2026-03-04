@@ -50,6 +50,11 @@ const c_Grup = 0x47727570;  // 'Grup'
 const c_VlLs = 0x566C4C73;  // 'VlLs'
 const c_Objc = 0x4F626A63;  // 'Objc'
 
+// Gradient type markers
+const c_GrdT = 0x47726454;  // 'GrdT'
+const c_Nois = 0x4E6F6973;  // 'Nois' (noise gradient type)
+const c_CstS = 0x43737453;  // 'CstS' (custom stops gradient type)
+
 function getFileExtension(filename) {
     const lastDot = filename.lastIndexOf(".");
     if (lastDot < 0) {
@@ -115,7 +120,25 @@ function handlePaletteFile(file) {
         return;
     }
 
-    showError("Unsupported file type. Supported: .grd, .ggr, .kgr, .svg, .css, .cpt");
+    if (extension === "afpalette") {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            parseAfpaletteBuffer(e.target.result, filenameWithoutExtension);
+        };
+        reader.readAsArrayBuffer(file);
+        return;
+    }
+
+    if (extension === "tres") {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            parseGodotTresText(e.target.result, filenameWithoutExtension);
+        };
+        reader.readAsText(file);
+        return;
+    }
+
+    showError("Unsupported file type: ." + extension + ". Supported formats: .grd, .ggr, .kgr, .svg, .css, .cpt, .afpalette, .tres");
 }
 
 function parseGrdArrayBuffer(buffer, filenameWithoutExtension) {
@@ -129,7 +152,7 @@ function parseGrdArrayBuffer(buffer, filenameWithoutExtension) {
     const magicNumber = dataView.getUint32(byteIndex, false); byteIndex += 4;
 
     if (magicNumber != c_8BGR) {
-        showError("Sorry, I am not able to recognize this format.");
+        showError("Not a valid Photoshop gradient file (unexpected header 0x" + magicNumber.toString(16) + ").");
         console.log("Bad Magic. Got 0x" + magicNumber.toString(16));
         return;
     }
@@ -138,9 +161,9 @@ function parseGrdArrayBuffer(buffer, filenameWithoutExtension) {
 
     if(fileVersion != 5) {
         if(fileVersion == 3) {
-            showError("Please use gradient files from Photoshop 6 or above as they are the only ones I can support at the moment. Thank you!");
+            showError("This is a Photoshop version 3 gradient file. Only version 5 (Photoshop 6+) is supported.");
         } else {
-            showError("It looks like I'm not able to support this particular file version at the moment.");
+            showError("Unsupported GRD file version (" + fileVersion + "). Only version 5 (Photoshop 6+) is supported.");
         }
 
         console.log("Bad Version. Got " + fileVersion);
@@ -149,7 +172,7 @@ function parseGrdArrayBuffer(buffer, filenameWithoutExtension) {
 
     const descriptorMagic = dataView.getUint32(byteIndex, false); byteIndex += 4;
     if(descriptorMagic != 16) {
-        showError("Sorry, I am not able to recognize this format.");
+        showError("Unexpected GRD descriptor header. The file may be corrupt.");
         return;
     }
 
@@ -158,6 +181,8 @@ function parseGrdArrayBuffer(buffer, filenameWithoutExtension) {
         Palettes: [],
         Groups: []
     };
+
+    let noiseGradientCount = 0;
 
     // Parse group hierarchy (if present) before processing gradients
     const groupMap = GRDParseHierarchy(dataView);
@@ -181,6 +206,21 @@ function parseGrdArrayBuffer(buffer, filenameWithoutExtension) {
         const paletteName = nameInfo.text || (filenameWithoutExtension + " " + (palettes.Palettes.length + 1));
 
         console.log("Found '" + paletteName + "'");
+
+        // Detect noise gradients — look for 'GrdT' key followed by 'Nois' value
+        // within a small window after the gradient name
+        const noiseCheckEnd = Math.min(i + 200, gradientEnd);
+        const grdtPos = GRDSkipToChunkInRange(dataView, gradientOffsets[index], c_GrdT, noiseCheckEnd);
+        if (grdtPos < noiseCheckEnd) {
+            // Skip 'enum' type tag (4 bytes) + enum type ID (variable)
+            // Look for the Nois marker nearby
+            const noisCheck = GRDSkipToChunkInRange(dataView, grdtPos, c_Nois, Math.min(grdtPos + 40, gradientEnd));
+            if (noisCheck < grdtPos + 40 && noisCheck < gradientEnd) {
+                console.log("    Skipping noise gradient: '" + paletteName + "'");
+                noiseGradientCount++;
+                continue; // Skip noise gradients entirely
+            }
+        }
 
         const palette = {
             Name: paletteName,
@@ -305,8 +345,8 @@ function parseGrdArrayBuffer(buffer, filenameWithoutExtension) {
             }
             else
             {
-                showError("Sorry, I only support converting RGB and HSB gradients.");
-                console.log("        Skipping unknown gradient format " + format);
+                showError("Encountered an unsupported colour format (0x" + format.toString(16) + "). RGB, HSB, CMYK, Lab, Greyscale and Book colours are supported.");
+                console.log("        Skipping unknown gradient format 0x" + format.toString(16));
                 shouldAbort = true;
             }
 
@@ -444,11 +484,21 @@ function parseGrdArrayBuffer(buffer, filenameWithoutExtension) {
         console.log("Found " + palettes.Groups.length + " groups: " + seenGroups.join(", "));
     }
 
-    console.log("Found " + palettes.Palettes.length + " palettes");
+    console.log("Found " + palettes.Palettes.length + " palettes" + (noiseGradientCount > 0 ? " (" + noiseGradientCount + " noise gradient(s) skipped)" : ""));
+
+    if (noiseGradientCount > 0 && palettes.Palettes.length > 0) {
+        showWarning(noiseGradientCount + " noise gradient" + (noiseGradientCount !== 1 ? "s were" : " was") + " skipped (noise gradients are procedural and cannot be converted).");
+    }
 
     if(palettes.Palettes.length > 0)
     {
         previewPalette(palettes);
+    }
+    else if (noiseGradientCount > 0) {
+        showError("This file contains only noise gradients, which are procedural and cannot be converted.");
+    }
+    else {
+        showError("No usable gradients found in this GRD file.");
     }
 }
 
@@ -456,7 +506,7 @@ function parseGgrText(text, filenameWithoutExtension) {
     const lines = text.replace(/\r\n/g, "\n").split("\n");
 
     if (lines.length === 0 || lines[0].trim() !== "GIMP Gradient") {
-        showError("Sorry, I could not recognize this GGR/KGR gradient format.");
+        showError("Not a valid GIMP/Krita gradient file — expected 'GIMP Gradient' header.");
         return;
     }
 
@@ -469,13 +519,13 @@ function parseGgrText(text, filenameWithoutExtension) {
     }
 
     if (!lines[lineIndex]) {
-        showError("Sorry, this gradient file is missing its segment count.");
+        showError("This gradient file is missing its segment count (line " + (lineIndex + 1) + ").");
         return;
     }
 
     const segmentCount = parseInt(lines[lineIndex].trim(), 10);
     if (!Number.isFinite(segmentCount) || segmentCount <= 0) {
-        showError("Sorry, this gradient file has an invalid segment count.");
+        showError("Invalid segment count in gradient file (\"" + lines[lineIndex].trim() + "\").");
         return;
     }
 
@@ -487,7 +537,7 @@ function parseGgrText(text, filenameWithoutExtension) {
     for (let segmentIndex = 0; segmentIndex < segmentCount && lineIndex < lines.length; segmentIndex++, lineIndex++) {
         const parts = lines[lineIndex].trim().split(/\s+/);
         if (parts.length < 13) {
-            showError("Sorry, this gradient file has an invalid segment entry.");
+            showError("Invalid segment entry at line " + (lineIndex + 1) + " (expected at least 13 values, got " + parts.length + ").");
             return;
         }
 
@@ -527,7 +577,7 @@ function parseGgrText(text, filenameWithoutExtension) {
     }
 
     if (colours.length === 0) {
-        showError("Sorry, this gradient file did not contain any usable segments.");
+        showError("The gradient file was parsed but did not contain any usable colour segments.");
         return;
     }
 
@@ -838,11 +888,19 @@ function LabToRGB(L, a, b)
 
 function showError(message) {
     errorElement.textContent = message;
+    errorElement.className = 'error-banner';
+    errorElement.style.display = 'block';
+}
+
+function showWarning(message) {
+    errorElement.textContent = message;
+    errorElement.className = 'error-banner warning-banner';
     errorElement.style.display = 'block';
 }
 
 function clearErrors() {
     errorElement.textContent = '';
+    errorElement.className = 'error-banner';
     errorElement.style.display = 'none';
 }
 
@@ -1274,4 +1332,88 @@ function hslToRgb(h, s, l) {
         b = hue2rgb(p, q, h - 1/3);
     }
     return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
+}
+
+// ================================================
+// Godot .tres Gradient Resource Parser
+// Parses Godot 4 text resource files containing Gradient data
+// ================================================
+
+function parseGodotTresText(text, filenameWithoutExtension) {
+    // Check for Gradient resource type
+    if (text.indexOf('type="Gradient"') === -1) {
+        showError("This .tres file does not contain a Godot Gradient resource.");
+        return;
+    }
+
+    // Extract resource_name (optional)
+    var gradientName = filenameWithoutExtension;
+    var nameMatch = text.match(/resource_name\s*=\s*"([^"]*)"/);
+    if (nameMatch) {
+        gradientName = nameMatch[1];
+    }
+
+    // Extract offsets
+    var offsetsMatch = text.match(/offsets\s*=\s*PackedFloat32Array\s*\(([^)]*)\)/);
+    if (!offsetsMatch) {
+        showError("No gradient offsets found in the .tres file.");
+        return;
+    }
+
+    var offsetStrings = offsetsMatch[1].split(',').map(function(s) { return s.trim(); }).filter(function(s) { return s.length > 0; });
+    var offsets = offsetStrings.map(function(s) { return parseFloat(s); });
+
+    // Extract colors (flat array: R, G, B, A, R, G, B, A, ...)
+    var colorsMatch = text.match(/colors\s*=\s*PackedColorArray\s*\(([^)]*)\)/);
+    if (!colorsMatch) {
+        showError("No gradient colors found in the .tres file.");
+        return;
+    }
+
+    var colorStrings = colorsMatch[1].split(',').map(function(s) { return s.trim(); }).filter(function(s) { return s.length > 0; });
+    var colorValues = colorStrings.map(function(s) { return parseFloat(s); });
+
+    // Each color is 4 floats (RGBA)
+    var colorCount = Math.floor(colorValues.length / 4);
+
+    if (colorCount === 0 || offsets.length === 0) {
+        showError("The .tres Gradient resource contains no usable stop data.");
+        return;
+    }
+
+    var stopCount = Math.min(offsets.length, colorCount);
+    var colours = [];
+
+    for (var i = 0; i < stopCount; i++) {
+        colours.push({
+            Red:      clamp01(colorValues[i * 4]),
+            Green:    clamp01(colorValues[i * 4 + 1]),
+            Blue:     clamp01(colorValues[i * 4 + 2]),
+            Alpha:    clamp01(colorValues[i * 4 + 3]),
+            Position: clamp01(offsets[i]),
+            Midpoint: 0.5
+        });
+    }
+
+    // Ensure start/end
+    if (colours[0].Position > 0) {
+        var first = colours[0];
+        colours.unshift({ Red: first.Red, Green: first.Green, Blue: first.Blue, Alpha: first.Alpha, Position: 0, Midpoint: 0.5 });
+    }
+    if (colours[colours.length - 1].Position < 1) {
+        var last = colours[colours.length - 1];
+        colours.push({ Red: last.Red, Green: last.Green, Blue: last.Blue, Alpha: last.Alpha, Position: 1, Midpoint: 0.5 });
+    }
+
+    var palettes = {
+        Name: filenameWithoutExtension,
+        Palettes: [{
+            Name: gradientName,
+            Colours: colours
+        }],
+        Groups: []
+    };
+
+    console.log("Found Godot gradient '" + gradientName + "' with " + colours.length + " stops");
+    previewPalette(palettes);
 }

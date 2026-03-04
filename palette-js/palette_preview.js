@@ -240,6 +240,15 @@ function exportInFormat(data) {
         case 'css':
             writeCssGradient(data);
             break;
+        case 'tres':
+            writeGodotGradient(data);
+            break;
+        case 'py':
+            writeBlenderScript(data);
+            break;
+        case 'gradients':
+            writeUnityGradient(data);
+            break;
         default:
             writeAffinityPalette(data);
     }
@@ -292,6 +301,19 @@ function buildExportForGroup(partData) {
             return { data: buildSvgGradients(partData), ext: '.svg' };
         case 'css':
             return { data: buildCssGradients(partData), ext: '.css' };
+        case 'tres':
+            if (partData.Palettes.length === 1) {
+                return { data: buildGodotTres(partData.Palettes[0].Name, partData.Palettes[0].Colours), ext: '.tres' };
+            }
+            var tresParts = [];
+            for (var ti = 0; ti < partData.Palettes.length; ti++) {
+                tresParts.push(buildGodotTres(partData.Palettes[ti].Name, partData.Palettes[ti].Colours));
+            }
+            return { data: tresParts.join('\n'), ext: '.tres' };
+        case 'py':
+            return { data: buildBlenderPy(partData), ext: '.py' };
+        case 'gradients':
+            return { data: buildUnityGradients(partData), ext: '.gradients' };
         default:
             return { data: buildAffinityPaletteBuffer(partData), ext: '.afpalette' };
     }

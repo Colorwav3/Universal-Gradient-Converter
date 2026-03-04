@@ -283,6 +283,12 @@ body::after {
     display: none;
 }
 
+.warning-banner {
+    background: rgba(251, 191, 36, 0.08);
+    border-color: rgba(251, 191, 36, 0.2);
+    color: #fde68a;
+}
+
 /* --- Download / Preview Section --- */
 .palette-title {
     font-size: 1.15rem;

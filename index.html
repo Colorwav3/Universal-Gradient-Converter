@@ -25,7 +25,7 @@
         <div class="soft-card" id="upload_card">
             <div class="soft-card-body">
                 <div class="upload-info">
-                    <p>Convert gradient files between Photoshop, GIMP, Krita, Affinity, SVG, CSS and CPTCITY formats.</p>
+                    <p>Convert gradient files between Photoshop, GIMP, Krita, Affinity, Godot, SVG, CSS and CPTCITY formats.</p>
 
                     <div class="format-tags">
                         <span class="format-tag input-tag">.grd</span>
@@ -34,6 +34,8 @@
                         <span class="format-tag input-tag">.svg</span>
                         <span class="format-tag input-tag">.css</span>
                         <span class="format-tag input-tag">.cpt</span>
+                        <span class="format-tag input-tag">.afpalette</span>
+                        <span class="format-tag input-tag">.tres</span>
                     </div>
                     <div class="upload-note">Import from any format above, then export to any target format</div>
                     <p id="errors" class="error-banner"></p>
@@ -42,7 +44,7 @@
                     <label class="btn-primary-soft">
                         <svg class="icon-svg" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
                         <span>Choose File</span>
-                        <input id="paletteFile" type="file" accept=".grd,.ggr,.kgr,.svg,.css,.cpt" hidden />
+                        <input id="paletteFile" type="file" accept=".grd,.ggr,.kgr,.svg,.css,.cpt,.afpalette,.tres" hidden />
                     </label>
                 </div>
             </div>
@@ -91,6 +93,18 @@
                             <span class="format-btn-ext">.css</span>
                             <span class="format-btn-app">CSS</span>
                         </button>
+                        <button class="format-btn" data-format="tres" onclick="selectExportFormat('tres')">
+                            <span class="format-btn-ext">.tres</span>
+                            <span class="format-btn-app">Godot</span>
+                        </button>
+                        <button class="format-btn" data-format="py" onclick="selectExportFormat('py')">
+                            <span class="format-btn-ext">.py</span>
+                            <span class="format-btn-app">Blender</span>
+                        </button>
+                        <button class="format-btn" data-format="gradients" onclick="selectExportFormat('gradients')">
+                            <span class="format-btn-ext">.gradients</span>
+                            <span class="format-btn-app">Unity</span>
+                        </button>
                     </div>
                 </div>
 
@@ -135,6 +149,9 @@
     <script src="palette-js/write_grd.js"></script>
     <script src="palette-js/write_svg.js"></script>
     <script src="palette-js/write_css.js"></script>
+    <script src="palette-js/write_godot.js"></script>
+    <script src="palette-js/write_blender.js"></script>
+    <script src="palette-js/write_unity.js"></script>
     <script src="palette-js/gradient_utils.js"></script>
     <script src="palette-js/palette_preview.js"></script>
 </body>
