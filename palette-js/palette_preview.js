@@ -250,6 +250,9 @@ function exportInFormat(data) {
         case 'ms':
             writeMaxScript(data);
             break;
+        case 'unreal':
+            writeUnrealScript(data);
+            break;
         default:
             writeAffinityPalette(data);
     }
@@ -350,6 +353,8 @@ function buildExportForGroup(partData) {
             return { data: buildCinema4dPy(partData), ext: '.py' };
         case 'ms':
             return { data: buildMaxScript(partData), ext: '.ms' };
+        case 'unreal':
+            return { data: buildUnrealPy(partData), ext: '.py' };
         default:
             return { data: buildAffinityPaletteBuffer(partData), ext: '.afpalette' };
     }

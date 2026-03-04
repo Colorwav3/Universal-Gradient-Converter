@@ -13,50 +13,8 @@
 </head>
 
 <body>
-    <!-- Software Icon Sprites -->
+    <!-- Software Icon Sprites (for CSS & SVG format icons only) -->
     <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
-        <symbol id="icon-ps" viewBox="0 0 24 24">
-            <rect x="2" y="2" width="20" height="20" rx="4.5" fill="#31A8FF"/>
-            <text x="12" y="16.2" text-anchor="middle" font-size="11" font-weight="800" fill="#001E36" font-family="Inter,sans-serif">Ps</text>
-        </symbol>
-        <symbol id="icon-af" viewBox="0 0 24 24">
-            <path d="M12 3.5L21.5 20.5H2.5Z" fill="#4FC3F7" opacity="0.85"/>
-        </symbol>
-        <symbol id="icon-gimp" viewBox="0 0 24 24">
-            <path d="M18.5 3.5l2 2-8 8-2.5.5.5-2.5 8-8z" fill="#C4A35A" opacity="0.85"/>
-            <path d="M9 15l-3.5 3.5" stroke="#C4A35A" stroke-width="2" stroke-linecap="round"/>
-            <circle cx="5" cy="19" r="1.5" fill="#C4A35A" opacity="0.5"/>
-        </symbol>
-        <symbol id="icon-krita" viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="9" fill="none" stroke="#3DAEE9" stroke-width="1.5" opacity="0.6"/>
-            <circle cx="12" cy="12" r="5" fill="none" stroke="#3DAEE9" stroke-width="1.5" opacity="0.8"/>
-            <circle cx="12" cy="12" r="2" fill="#3DAEE9"/>
-        </symbol>
-        <symbol id="icon-blender" viewBox="0 0 24 24">
-            <ellipse cx="14" cy="13" rx="7" ry="6" fill="none" stroke="#EA7600" stroke-width="1.8"/>
-            <circle cx="14" cy="13" r="2.2" fill="#EA7600"/>
-            <path d="M2 13h6" stroke="#EA7600" stroke-width="2" stroke-linecap="round"/>
-            <path d="M5.5 8l5 5" stroke="#EA7600" stroke-width="1.5" stroke-linecap="round"/>
-        </symbol>
-        <symbol id="icon-c4d" viewBox="0 0 24 24">
-            <rect x="1" y="4" width="22" height="16" rx="4" fill="#1A3A5C"/>
-            <text x="12" y="15.2" text-anchor="middle" font-size="7.5" font-weight="800" fill="#5CC8FF" font-family="Inter,sans-serif">C4D</text>
-        </symbol>
-        <symbol id="icon-3dsmax" viewBox="0 0 24 24">
-            <path d="M12 2L22 7.5V16.5L12 22L2 16.5V7.5Z" fill="none" stroke="#16A1AD" stroke-width="1.5" stroke-linejoin="round"/>
-            <path d="M12 12L22 7.5M12 12V22M12 12L2 7.5" stroke="#16A1AD" stroke-width="1.2" opacity="0.5"/>
-        </symbol>
-        <symbol id="icon-godot" viewBox="0 0 24 24">
-            <rect x="4" y="8" width="16" height="12" rx="4" fill="none" stroke="#478CBF" stroke-width="1.8"/>
-            <circle cx="9.5" cy="14" r="1.5" fill="#478CBF"/>
-            <circle cx="14.5" cy="14" r="1.5" fill="#478CBF"/>
-            <line x1="12" y1="4.5" x2="12" y2="8" stroke="#478CBF" stroke-width="2" stroke-linecap="round"/>
-            <circle cx="12" cy="3.5" r="1.2" fill="#478CBF"/>
-        </symbol>
-        <symbol id="icon-unity" viewBox="0 0 24 24">
-            <path d="M12 2L22 7.5V16.5L12 22L2 16.5V7.5Z" fill="none" stroke="rgba(255,255,255,0.65)" stroke-width="1.5" stroke-linejoin="round"/>
-            <path d="M12 12L22 7.5M12 12V22M12 12L2 7.5" stroke="rgba(255,255,255,0.35)" stroke-width="1.2"/>
-        </symbol>
         <symbol id="icon-svg" viewBox="0 0 24 24">
             <path d="M9 6L3 12l6 6M15 6l6 6-6 6" stroke="#FFB13B" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
             <line x1="13" y1="6" x2="11" y2="18" stroke="#FFB13B" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
@@ -72,7 +30,7 @@
         <!-- Header -->
         <header class="app-header">
             <h1>Universal Gradient Converter</h1>
-            <div class="subtitle">11 formats · Design · 3D · Game Engines · Web</div>
+            <div class="subtitle">12 formats · Design · 3D · Game Engines · Web</div>
         </header>
 
         <!-- Upload Card -->
@@ -80,15 +38,16 @@
             <div class="soft-card-body">
                 <div class="upload-info">
                     <div class="software-showcase">
-                        <span class="software-chip"><svg class="sw-icon"><use href="#icon-ps"/></svg>Photoshop</span>
-                        <span class="software-chip"><svg class="sw-icon"><use href="#icon-af"/></svg>Affinity</span>
-                        <span class="software-chip"><svg class="sw-icon"><use href="#icon-gimp"/></svg>GIMP</span>
-                        <span class="software-chip"><svg class="sw-icon"><use href="#icon-krita"/></svg>Krita</span>
-                        <span class="software-chip"><svg class="sw-icon"><use href="#icon-blender"/></svg>Blender</span>
-                        <span class="software-chip"><svg class="sw-icon"><use href="#icon-c4d"/></svg>Cinema 4D</span>
-                        <span class="software-chip"><svg class="sw-icon"><use href="#icon-3dsmax"/></svg>3ds Max</span>
-                        <span class="software-chip"><svg class="sw-icon"><use href="#icon-godot"/></svg>Godot</span>
-                        <span class="software-chip"><svg class="sw-icon"><use href="#icon-unity"/></svg>Unity</span>
+                        <span class="software-chip"><img class="sw-icon" src="https://cdn.simpleicons.org/adobephotoshop/31A8FF" alt="">Photoshop</span>
+                        <span class="software-chip"><img class="sw-icon" src="https://cdn.simpleicons.org/affinity/4FC3F7" alt="">Affinity</span>
+                        <span class="software-chip"><img class="sw-icon" src="https://cdn.simpleicons.org/gimp/B8A88A" alt="">GIMP</span>
+                        <span class="software-chip"><img class="sw-icon" src="https://cdn.simpleicons.org/krita/3DAEE9" alt="">Krita</span>
+                        <span class="software-chip"><img class="sw-icon" src="https://cdn.simpleicons.org/blender/EA7600" alt="">Blender</span>
+                        <span class="software-chip"><img class="sw-icon" src="https://cdn.simpleicons.org/cinema4d/5CC8FF" alt="">Cinema 4D</span>
+                        <span class="software-chip"><img class="sw-icon" src="https://cdn.simpleicons.org/autodesk/37A6BA" alt="">3ds Max</span>
+                        <span class="software-chip"><img class="sw-icon" src="https://cdn.simpleicons.org/godotengine/478CBF" alt="">Godot</span>
+                        <span class="software-chip"><img class="sw-icon" src="https://cdn.simpleicons.org/unity/FFFFFF" alt="">Unity</span>
+                        <span class="software-chip"><img class="sw-icon" src="https://cdn.simpleicons.org/unrealengine/FFFFFF" alt="">Unreal</span>
                         <span class="software-chip"><svg class="sw-icon"><use href="#icon-svg"/></svg>SVG</span>
                         <span class="software-chip"><svg class="sw-icon"><use href="#icon-css"/></svg>CSS</span>
                     </div>
@@ -148,22 +107,22 @@
                             <div class="format-group-label">Design</div>
                             <div class="format-group-btns">
                                 <button class="format-btn active" data-format="afpalette" onclick="selectExportFormat('afpalette')">
-                                    <svg class="format-icon"><use href="#icon-af"/></svg>
+                                    <img class="format-icon" src="https://cdn.simpleicons.org/affinity/4FC3F7" alt="">
                                     <span class="format-btn-app">Affinity</span>
                                     <span class="format-btn-ext">.afpalette</span>
                                 </button>
                                 <button class="format-btn" data-format="grd" onclick="selectExportFormat('grd')">
-                                    <svg class="format-icon"><use href="#icon-ps"/></svg>
+                                    <img class="format-icon" src="https://cdn.simpleicons.org/adobephotoshop/31A8FF" alt="">
                                     <span class="format-btn-app">Photoshop</span>
                                     <span class="format-btn-ext">.grd</span>
                                 </button>
                                 <button class="format-btn" data-format="ggr" onclick="selectExportFormat('ggr')">
-                                    <svg class="format-icon"><use href="#icon-gimp"/></svg>
+                                    <img class="format-icon" src="https://cdn.simpleicons.org/gimp/B8A88A" alt="">
                                     <span class="format-btn-app">GIMP</span>
                                     <span class="format-btn-ext">.ggr</span>
                                 </button>
                                 <button class="format-btn" data-format="kgr" onclick="selectExportFormat('kgr')">
-                                    <svg class="format-icon"><use href="#icon-krita"/></svg>
+                                    <img class="format-icon" src="https://cdn.simpleicons.org/krita/3DAEE9" alt="">
                                     <span class="format-btn-app">Krita</span>
                                     <span class="format-btn-ext">.kgr</span>
                                 </button>
@@ -173,29 +132,34 @@
                             <div class="format-group-label">3D / Game Engines</div>
                             <div class="format-group-btns">
                                 <button class="format-btn" data-format="py" onclick="selectExportFormat('py')">
-                                    <svg class="format-icon"><use href="#icon-blender"/></svg>
+                                    <img class="format-icon" src="https://cdn.simpleicons.org/blender/EA7600" alt="">
                                     <span class="format-btn-app">Blender</span>
                                     <span class="format-btn-ext">.py</span>
                                 </button>
                                 <button class="format-btn" data-format="c4d" onclick="selectExportFormat('c4d')">
-                                    <svg class="format-icon"><use href="#icon-c4d"/></svg>
+                                    <img class="format-icon" src="https://cdn.simpleicons.org/cinema4d/5CC8FF" alt="">
                                     <span class="format-btn-app">Cinema 4D</span>
                                     <span class="format-btn-ext">.py</span>
                                 </button>
                                 <button class="format-btn" data-format="ms" onclick="selectExportFormat('ms')">
-                                    <svg class="format-icon"><use href="#icon-3dsmax"/></svg>
+                                    <img class="format-icon" src="https://cdn.simpleicons.org/autodesk/37A6BA" alt="">
                                     <span class="format-btn-app">3ds Max</span>
                                     <span class="format-btn-ext">.ms</span>
                                 </button>
                                 <button class="format-btn" data-format="tres" onclick="selectExportFormat('tres')">
-                                    <svg class="format-icon"><use href="#icon-godot"/></svg>
+                                    <img class="format-icon" src="https://cdn.simpleicons.org/godotengine/478CBF" alt="">
                                     <span class="format-btn-app">Godot</span>
                                     <span class="format-btn-ext">.tres</span>
                                 </button>
                                 <button class="format-btn" data-format="gradients" onclick="selectExportFormat('gradients')">
-                                    <svg class="format-icon"><use href="#icon-unity"/></svg>
+                                    <img class="format-icon" src="https://cdn.simpleicons.org/unity/FFFFFF" alt="">
                                     <span class="format-btn-app">Unity</span>
                                     <span class="format-btn-ext">.gradients</span>
+                                </button>
+                                <button class="format-btn" data-format="unreal" onclick="selectExportFormat('unreal')">
+                                    <img class="format-icon" src="https://cdn.simpleicons.org/unrealengine/FFFFFF" alt="">
+                                    <span class="format-btn-app">Unreal</span>
+                                    <span class="format-btn-ext">.py</span>
                                 </button>
                             </div>
                         </div>
@@ -221,57 +185,42 @@
                         <div class="format-group">
                             <div class="format-group-btns format-group-btns-flat">
                                 <button class="format-btn active" data-format="afpalette" onclick="selectExportFormat('afpalette')">
-                                    <svg class="format-icon-sm"><use href="#icon-af"/></svg>
                                     <span class="format-btn-ext">.afpalette</span>
-                                    <span class="format-btn-app">Affinity</span>
+                                    <span class="format-btn-app">Affinity Photo · Designer · Publisher</span>
                                 </button>
                                 <button class="format-btn" data-format="grd" onclick="selectExportFormat('grd')">
-                                    <svg class="format-icon-sm"><use href="#icon-ps"/></svg>
                                     <span class="format-btn-ext">.grd</span>
-                                    <span class="format-btn-app">Photoshop</span>
+                                    <span class="format-btn-app">Photoshop · After Effects · Illustrator</span>
                                 </button>
                                 <button class="format-btn" data-format="ggr" onclick="selectExportFormat('ggr')">
-                                    <svg class="format-icon-sm"><use href="#icon-gimp"/></svg>
                                     <span class="format-btn-ext">.ggr</span>
-                                    <span class="format-btn-app">GIMP</span>
+                                    <span class="format-btn-app">GIMP · Krita · Inkscape</span>
                                 </button>
                                 <button class="format-btn" data-format="kgr" onclick="selectExportFormat('kgr')">
-                                    <svg class="format-icon-sm"><use href="#icon-krita"/></svg>
                                     <span class="format-btn-ext">.kgr</span>
                                     <span class="format-btn-app">Krita</span>
                                 </button>
                                 <button class="format-btn" data-format="svg" onclick="selectExportFormat('svg')">
-                                    <svg class="format-icon-sm"><use href="#icon-svg"/></svg>
                                     <span class="format-btn-ext">.svg</span>
-                                    <span class="format-btn-app">SVG</span>
+                                    <span class="format-btn-app">Browsers · Inkscape · Illustrator</span>
                                 </button>
                                 <button class="format-btn" data-format="css" onclick="selectExportFormat('css')">
-                                    <svg class="format-icon-sm"><use href="#icon-css"/></svg>
                                     <span class="format-btn-ext">.css</span>
-                                    <span class="format-btn-app">CSS</span>
+                                    <span class="format-btn-app">Browsers · Web</span>
                                 </button>
                                 <button class="format-btn" data-format="tres" onclick="selectExportFormat('tres')">
-                                    <svg class="format-icon-sm"><use href="#icon-godot"/></svg>
                                     <span class="format-btn-ext">.tres</span>
-                                    <span class="format-btn-app">Godot</span>
+                                    <span class="format-btn-app">Godot Engine</span>
                                 </button>
                                 <button class="format-btn" data-format="gradients" onclick="selectExportFormat('gradients')">
-                                    <svg class="format-icon-sm"><use href="#icon-unity"/></svg>
                                     <span class="format-btn-ext">.gradients</span>
                                     <span class="format-btn-app">Unity</span>
                                 </button>
                                 <button class="format-btn" data-format="py" onclick="selectExportFormat('py')">
-                                    <svg class="format-icon-sm"><use href="#icon-blender"/></svg>
                                     <span class="format-btn-ext">.py</span>
-                                    <span class="format-btn-app">Blender</span>
-                                </button>
-                                <button class="format-btn" data-format="c4d" onclick="selectExportFormat('c4d')">
-                                    <svg class="format-icon-sm"><use href="#icon-c4d"/></svg>
-                                    <span class="format-btn-ext">.py</span>
-                                    <span class="format-btn-app">Cinema 4D</span>
+                                    <span class="format-btn-app">Blender · Cinema 4D · Unreal</span>
                                 </button>
                                 <button class="format-btn" data-format="ms" onclick="selectExportFormat('ms')">
-                                    <svg class="format-icon-sm"><use href="#icon-3dsmax"/></svg>
                                     <span class="format-btn-ext">.ms</span>
                                     <span class="format-btn-app">3ds Max</span>
                                 </button>
@@ -326,6 +275,7 @@
     <script src="palette-js/write_unity.js"></script>
     <script src="palette-js/write_cinema4d.js"></script>
     <script src="palette-js/write_3dsmax.js"></script>
+    <script src="palette-js/write_unreal.js"></script>
     <script src="palette-js/gradient_utils.js"></script>
     <script src="palette-js/palette_preview.js"></script>
 </body>
