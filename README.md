@@ -1,103 +1,112 @@
-# GrdToAfpaletteExtended
+# Universal Gradient Converter
 
-A multi-format gradient converter — import from Photoshop `.grd`, GIMP `.ggr`, Krita `.kgr`, `.svg`, `.css`, and CPTCITY `.cpt`, then export to Affinity `.afpalette`, Photoshop `.grd`, GIMP `.ggr`, Krita `.kgr`, `.svg`, or `.css`.
+A browser-based tool that converts gradient files between **11 formats** across design apps, 3D/game engines, and web technologies — entirely client-side.
 
-Extended fork of [Balakov/GrdToAfpalette](https://github.com/Balakov/GrdToAfpalette).
+> Built on [Balakov/GrdToAfpalette](https://github.com/Balakov/GrdToAfpalette) by [Mike Stimpson](https://mikestimpson.com). Extended by [Colorwav3](https://github.com/Colorwav3) with AI assistance (GitHub Copilot / Claude).
 
-> **Note:** This extended version was developed with the assistance of AI tools (GitHub Copilot / Claude).
+---
+
+## Supported Formats
+
+| Direction | Format | Software |
+|-----------|--------|----------|
+| Import & Export | `.grd` (v5) | Adobe Photoshop / After Effects |
+| Import & Export | `.ggr` | GIMP |
+| Import & Export | `.kgr` | Krita |
+| Import & Export | `.svg` | Any SVG editor / browser |
+| Import & Export | `.css` | Web (CSS gradients) |
+| Import & Export | `.afpalette` | Affinity Photo / Designer / Publisher |
+| Import & Export | `.tres` | Godot Engine |
+| Import only | `.cpt` | CPTCITY |
+| Export only | `.py` | Blender (color ramp script) |
+| Export only | `.py` | Cinema 4D (gradient shader script) |
+| Export only | `.ms` | 3ds Max (MaxScript gradient ramp) |
+| Export only | `.gradients` | Unity |
 
 ## Features
 
-### Import Formats
-- Adobe Photoshop **`.grd`** (v5) — RGB, HSB, CMYK, Lab, Greyscale, Book Color
-- GIMP **`.ggr`**
-- Krita **`.kgr`**
-- **SVG** (`<linearGradient>` / `<radialGradient>`)
-- **CSS** (`linear-gradient()`)
-- CPTCITY **`.cpt`**
+- **11 format support** — design, 3D, game engines, and web
+- **CMYK, Lab, Greyscale & Book Color** auto-conversion to RGB
+- **Noise gradient detection** — skips procedural noise gradients with a clear warning
+- **Group-aware** — reads Photoshop `.grd` hierarchy, browse groups via tabs
+- **Dual export view** — switch between "By Software" (grouped) and "By File Type" (flat grid)
+- **Live preview** — scrollable gradient grid with hover zoom
+- **Batch download** — single file, current group, or all groups as ZIP
+- **100% client-side** — nothing leaves your browser
 
-### Export Formats
-- Affinity **`.afpalette`** (Affinity Photo / Designer / Publisher 1 & 2)
-- Adobe Photoshop **`.grd`** (v5)
-- GIMP **`.ggr`**
-- Krita **`.kgr`**
-- **SVG** (defs with `<linearGradient>`)
-- **CSS** (custom properties + utility classes)
+## Quick Start
 
-### Color Space Support
-- **RGB** and **HSV/HSB** — native
-- **CMYK → RGB** conversion
-- **CIE Lab → sRGB** conversion (D65 illuminant, gamma-corrected)
-- **Greyscale → RGB** conversion
-- **Book Color** fallback (reads embedded RGB or defaults to neutral gray)
+1. Open `index.html` in a browser (or host it anywhere — it's a static page)
+2. Click **Choose File** and pick any supported gradient file
+3. Preview your gradients — use group tabs if the file has groups
+4. Pick a target format from the export panel
+5. Hit **Download**
 
-### UI & Workflow
-- Clean dark glassmorphism UI with gradient accents
-- Scrollable preview grid with hover zoom
-- Group detection from Photoshop `.grd` hierarchy — browsable via tabs
-- One-click format selector to switch export target
-- Download single file, individual group, or all groups as ZIP
-- Client-side only — no files leave the browser
+## Color Space Conversion
 
-## Usage
+All non-RGB color spaces are automatically converted on import:
 
-1. Open the tool in a browser
-2. Click **Choose File** and select any supported gradient file
-3. Browse the gradient preview — use group tabs to filter if groups were detected
-4. Select the target export format (afpalette, grd, ggr, kgr, svg, css)
-5. Download:
-   - **Single file** — all gradients in one file
-   - **Single group** — select a group tab first
-   - **ZIP archive** — one file per group in a folder
+| Source | Method |
+|--------|--------|
+| CMYK | `R = (1−C)(1−K)`, `G = (1−M)(1−K)`, `B = (1−Y)(1−K)` |
+| CIE Lab | Lab → XYZ (D65) → linear sRGB (3×3 matrix) → gamma sRGB |
+| Greyscale | `R = G = B = gray` |
+| Book Color | Reads embedded RGB fallback; defaults to 50% gray |
+
+> Conversions are device-independent (no ICC profiles). Colors may differ slightly from the original application.
 
 ## Limitations
 
-- Transparency is only partially supported. Adobe gradients have a separate transparency track independent from colours. The tool inserts interpolated colour stops to approximate transparency, which may not be a perfect match.
-- CMYK/Lab conversion is device-independent (no ICC profiles) — colors may differ slightly from the original Photoshop rendering.
+- **Transparency** — Adobe gradients store opacity on a separate track. The converter inserts interpolated stops to approximate it, which may not be pixel-perfect.
+- **Unity** — limited to 8 color keys per gradient (Unity engine limit). Gradients with more stops are resampled.
+- **Noise gradients** — procedural noise gradients in `.grd` files cannot be converted and are skipped.
 
-## Technical Details
+## Technical Notes
 
-### The .afpalette Format
+<details>
+<summary><strong>.afpalette format</strong></summary>
 
-The Affinity palette format is a chunk-based binary format with a header (80 bytes), body, and footer (115 bytes). A CRC32 checksum (polynomial `0xEDB88320`) is computed over the body and written to two positions in the footer. Without a valid checksum, Affinity 2 rejects the file.
+Chunk-based binary: 80-byte header, body, 115-byte footer. A CRC32 checksum (`0xEDB88320`) over the body is written to two footer positions. Affinity 2 rejects files with invalid checksums.
+</details>
 
-### GRD Group Hierarchy
+<details>
+<summary><strong>GRD group hierarchy</strong></summary>
 
-Photoshop `.grd` v5 files can contain a hierarchy section near the end of the file, preceded by `8BIMphry` and `hierarchy`. This section contains a `VlLs` (Value List) with `Objc` (Object) entries of three class types:
+`.grd` v5 files may contain a hierarchy section (`8BIMphry` → `hierarchy` → `VlLs`) with `Grup` (group start), `groupEnd` (group end), and `preset` (gradient ref) objects. Groups can nest; the parser uses a stack to assign each gradient to its leaf group.
+</details>
 
-- **`Grup`** — group start (contains a `Nm` TEXT field with the group name)
-- **`groupEnd`** — group end marker
-- **`preset`** — gradient reference (maps 1:1 to gradients in the main data)
+<details>
+<summary><strong>Architecture</strong></summary>
 
-Groups can be nested. The parser tracks a stack of group names and assigns each preset to the innermost (leaf) group.
+The `.grd` parser uses bounded chunk search (`GRDSkipToChunkInRange`, `GRDFindAllChunks`) rather than a full descriptor parser. All importers produce a common JSON intermediate format consumed by all export writers:
 
-### Color Space Conversion
+```
+{ Name, Palettes: [{ Name, Colours: [{ Red, Green, Blue, Alpha, Position, Midpoint }] }], Groups: [] }
+```
 
-- **CMYK → RGB**: `R = (1-C)(1-K)`, `G = (1-M)(1-K)`, `B = (1-Y)(1-K)`
-- **Lab → sRGB**: Lab → XYZ (D65 illuminant, CIE standard) → linear sRGB (3×3 matrix) → gamma-corrected sRGB
-- **Greyscale → RGB**: `R = G = B = gray`
-- **Book Color**: Attempts to read an embedded RGB fallback that Photoshop stores after the Book Color data; defaults to 50% gray if not found
+Writers:
+- `write_afpalette.js` — binary with CRC32
+- `write_grd.js` — Photoshop GRD v5 binary
+- `write_ggr.js` — GIMP/Krita text format
+- `write_svg.js` — SVG `<linearGradient>` defs
+- `write_css.js` — CSS custom properties + utility classes
+- `write_godot.js` — Godot `.tres` resource
+- `write_blender.js` — Blender Python color ramp script
+- `write_unity.js` — Unity `.gradients` YAML
+- `write_cinema4d.js` — Cinema 4D Python shader script
+- `write_3dsmax.js` — 3ds Max MaxScript
 
-### The Code
-
-The `.grd` file loader uses a bounded chunk search approach (`GRDSkipToChunkInRange`, `GRDFindAllChunks`) to parse the binary format without requiring a full descriptor parser. After extracting gradient data, the code puts it into a simple JSON intermediate format that all export writers consume.
-
-Export writers:
-- `write_afpalette.js` — Affinity binary format with CRC32
-- `write_grd.js` — Photoshop GRD v5 binary format
-- `write_ggr.js` — GIMP/Krita text-based gradient format
-- `write_svg.js` — SVG with `<linearGradient>` definitions
-- `write_css.js` — CSS custom properties and utility classes
+</details>
 
 ## Credits
 
 - Original tool by [Mike Stimpson](https://mikestimpson.com) — [Balakov/GrdToAfpalette](https://github.com/Balakov/GrdToAfpalette)
-- Extended version by [Colorwav3](https://github.com/Colorwav3) with AI assistance (GitHub Copilot / Claude)
+- Extended by [Colorwav3](https://github.com/Colorwav3) with AI assistance (GitHub Copilot / Claude)
 - [JSZip](https://stuk.github.io/jszip/) for ZIP archive generation
 
-## Useful Links
+## License
 
-- [Description of .grd chunks](http://www.selapa.net/swatches/gradients/fileformats.php)
+See [LICENSE](LICENSE) for details.
 - [.grd file format description](https://github.com/tonton-pixel/json-photoshop-scripting/tree/master/Documentation/Photoshop-Gradients-File-Format#descriptor)
 - [Official Adobe file formats](https://www.adobe.com/devnet-apps/photoshop/fileformatashtml/#50577411_pgfId-1059252)
 - [Adobe](https://www.adobe.com/)
